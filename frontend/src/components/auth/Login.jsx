@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/authStore';
+import { useToastStore } from '../../store/useToastStore';
 import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
@@ -10,6 +11,7 @@ const Login = () => {
   const [validationErrors, setValidationErrors] = useState({});
 
   const { login, loading, error, clearError } = useAuthStore();
+  const addToast = useToastStore((s) => s.addToast);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +34,7 @@ const Login = () => {
 
     try {
       await login(formData.email, formData.password);
+      addToast({ message: 'Signed in successfully!', type: 'success' });
       navigate('/');
     } catch (err) {
       // Error is already handled and displayed via auth store
