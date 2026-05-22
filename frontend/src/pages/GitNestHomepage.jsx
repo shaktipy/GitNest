@@ -55,9 +55,9 @@ export default function GitNestHomepage() {
             {/* BACKGROUND */}
             <div className="absolute inset-0 -z-10 overflow-hidden">
 
-                <div className="absolute -top-50 left-1/2 -translate-x-1/2 w-225 h-[900px] rounded-full bg-[radial-gradient(circle,rgba(0,220,130,0.12),transparent_60%)] blur-3xl" />
+                <div className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[900px] h-[900px] rounded-full bg-[radial-gradient(circle,rgba(0,220,130,0.12),transparent_60%)] blur-3xl" />
 
-                <div className="absolute top-[20%] right-[-10%] w-[500px] h-125 rounded-full bg-cyan-400/10 blur-3xl" />
+                <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-cyan-400/10 blur-3xl" />
 
                 <div className="absolute inset-0 opacity-[0.04]"
                     style={{
@@ -537,7 +537,7 @@ export default function GitNestHomepage() {
                                 </div>
 
                                 {/* TITLE */}
-                                <h3 className="text-[34px] leading-tight tracking-[-0.03em] font-black text-[#071138] dark:text-black mb-4">
+                                <h3 className="text-[34px] leading-tight tracking-[-0.03em] font-black text-[#071138] dark:text-white mb-4">
                                     {feature.title}
                                 </h3>
 
@@ -680,7 +680,7 @@ export default function GitNestHomepage() {
                     <div className="relative overflow-hidden rounded-[42px] border border-[#b8f0dd] bg-gradient-to-br from-white via-[#f7fffc] to-[#f4fffb] dark:from-[#11151d] dark:to-[#0c1017] shadow-[0_20px_80px_rgba(16,185,129,0.08)] px-8 md:px-16 py-20 text-center">
 
                         {/* FLOATING CODE CARD */}
-                        <div className="hidden lg:flex absolute right-16 top-24 w-35 h-35 rounded-[36px] border border-white/60 bg-white/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,185,129,0.15)] items-center justify-center rotate-16">
+                        <div className="hidden lg:flex absolute right-16 top-24 w-[140px] h-[140px] rounded-[36px] border border-white/60 bg-white/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(16,185,129,0.15)] items-center justify-center rotate-[16deg]">
 
                             <div className="absolute inset-0 rounded-[36px] bg-gradient-to-br from-[#00dc82]/10 to-[#4fd1ff]/10" />
 
