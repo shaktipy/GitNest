@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import Repository from '../models/Repository.model.js';
+import User from '../models/User.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import AppError from '../utils/AppError.js';
 import { sendSuccess } from '../utils/responseHandlers.js';
 import { logActivity } from '../services/activity.service.js';
 import ACTIVITY_TYPES from '../constants/activityTypes.js';
+import paginate, {buildPaginationMeta } from '../utils/paginate.js';
 
 export const createRepository = asyncHandler(async (req, res, next)=> {
     const { name, description, visibility, language, topics } = req.body;
@@ -53,7 +55,12 @@ export const createRepository = asyncHandler(async (req, res, next)=> {
 export const getRepository = asyncHandler(async (req, res, next) => {
     const { username, reponame } = req.params;
 
-    const repository = await Repository.findOne({ name: reponame})
+    const owner = await User.findOne({ username: username.toLowerCase() });
+    if (!owner) {
+        return next(new AppError('Repository not found', 404));
+    }
+
+    const repository = await Repository.findOne({ name: reponame, owner: owner._id })
     .populate('owner', 'username avatarUrl bio');
 
     if(!repository) {
@@ -73,25 +80,56 @@ export const getRepository = asyncHandler(async (req, res, next) => {
 export const getUserRepositories = asyncHandler(async (req, res, next) => {
     const { username } = req.params;
 
-    const repositories = await Repository.find()
-    .populate({
-        path: 'owner',
-        match: { username },
-        select: 'username avatarUrl',
-    })
-    .then((repos) => repos.filter((r) => r.owner !== null));
+    // Resolve the owner first so we can query by _id (uses the compound index)
+    // instead of fetching all repositories and filtering in memory
+    const owner = await User.findOne({ username: username.toLowerCase() }).select('_id');
+    if (!owner) {
+        return next(new AppError('User not found', 404));
+    }
 
-    const filtered = repositories.filter((r) => {
-        if(r.visibility === 'public') return true;
-        if(req.user && r.owner._id.toString() === req.user.id) return true;
-        return false;
-    });
+    // Build visibility filter: owners see all their repos; everyone else sees only public
+    const isOwner = req.user && req.user.id === owner._id.toString();
+    const filter = isOwner
+        ? { owner: owner._id }
+        : { owner: owner._id, visibility: 'public' };
 
-    sendSuccess(res, 200, filtered);
+    const repositories = await Repository.find(filter)
+        .populate('owner', 'username avatarUrl')
+        .sort({ createdAt: -1 });
+
+    sendSuccess(res, 200, repositories);
+  const { username } = req.params;
+  const { page, limit, skip } = paginate(req.query.page, req.query.limit);
+  const user = await User.findOne({ username: username.toLowerCase() });
+
+  if (!user) return next(new AppError('User not found', 404));
+
+  const filter = {
+    owner: user._id,
+    ...(req.user?.id !== user._id.toString() && { visibility: 'public' }),
+  };
+
+  const [repositories, totalCount] = await Promise.all([
+    Repository.find(filter)
+      .populate('owner', 'username avatarUrl')
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 }),
+    Repository.countDocuments(filter),
+  ]);
+
+  const pagination = buildPaginationMeta(page, limit, totalCount);
+
+  sendSuccess(res, 200, { repositories, pagination });
 });
 
 export const updateRepository = asyncHandler(async(req, res, next) => {
     const { username, reponame } = req.params;
+
+    const owner = await User.findOne({ username: username.toLowerCase() });
+    if (!owner || owner._id.toString() !== req.user.id) {
+        return next(new AppError('Repository not found or unauthorized', 404));
+    }
 
     const repository = await Repository.findOne({
         name: reponame,
@@ -117,7 +155,12 @@ export const updateRepository = asyncHandler(async(req, res, next) => {
 });
 
 export const deleteRepository = asyncHandler(async (req, res, next) => {
-    const { reponame } = req.params;
+    const { username, reponame } = req.params;
+
+    const owner = await User.findOne({ username: username.toLowerCase() });
+    if (!owner || owner._id.toString() !== req.user.id) {
+        return next(new AppError('Repository not found or unauthorized', 404));
+    }
 
     const repository = await Repository.findOne({
         name: reponame,
@@ -134,9 +177,14 @@ export const deleteRepository = asyncHandler(async (req, res, next) => {
 });
 
 export const starRepository = asyncHandler(async(req, res, next) => {
-    const { reponame } = req.params;
+    const { username, reponame } = req.params;
 
-    const repository = await Repository.findOne({ name: reponame });
+    const owner = await User.findOne({ username: username.toLowerCase() });
+    if (!owner) {
+        return next(new AppError('Repository not found', 404));
+    }
+
+    const repository = await Repository.findOne({ name: reponame, owner: owner._id });
 
     if(!repository) {
         return next(new AppError('Repository not found', 404));
@@ -167,9 +215,14 @@ export const starRepository = asyncHandler(async(req, res, next) => {
 });
 
 export const forkRepository = asyncHandler(async (req, res, next) => {
-    const { reponame } = req.params;
+    const { username, reponame } = req.params;
 
-    const original = await Repository.findOne({ name: reponame });
+    const owner = await User.findOne({ username: username.toLowerCase() });
+    if (!owner) {
+        return next(new AppError('Repository not found', 404));
+    }
+
+    const original = await Repository.findOne({ name: reponame, owner: owner._id });
 
     if(!original) {
         return next(new AppError('Repository not found', 404));

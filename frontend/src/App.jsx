@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import ErrorBoundary from './components/ui/ErrorBoundary.jsx';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuthStore } from './store/authStore';
 import { useThemeStore } from './store/useThemeStore';
@@ -8,11 +9,15 @@ import './App.css';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import GitNestHomepage from './pages/GitNestHomepage';
+import DocumentationPage from './pages/DocumentationPage';
 import NotFound from './pages/NotFound';
 import PullRequestsPage from './pages/PullRequestsPage';
 import PullRequestDetailPage from './pages/PullRequestDetailPage';
 import UserProfile from './pages/UserProfile';
 import ActivityFeedPage from './pages/ActivityFeed.jsx';
+import ComponentShowcase from './pages/ComponentShowcase.jsx';
+import BackToTop from './components/BackToTop/BackToTop';
+import GitNestTerms from './pages/GitNestTerms.jsx';
 
 const Dashboard = () => {
   const { user, logout } = useAuthStore();
@@ -45,24 +50,27 @@ function App() {
   return (
     <div className="min-h-screen">
       <ToastContainer />
-      <header className="p-4 flex justify-end border-b border-zinc-200 dark:border-zinc-800 transition-colors">
-      
-      </header>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/" element={<GitNestHomepage />} />
-        <Route path="/pull-requests" element={<PullRequestsPage />} />
-        <Route path="/pull-requests/:id" element={<PullRequestDetailPage />} />
-        <Route path="/activities" element={<ActivityFeedPage />} />
-        <Route path="/:username" element={<UserProfile />} />
+      <ErrorBoundary>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<GitNestHomepage />} />
+          <Route path="/docs" element={<DocumentationPage />} />
+          <Route path="/pull-requests" element={<PullRequestsPage />} />
+          <Route path="/pull-requests/:id" element={<PullRequestDetailPage />} />
+          <Route path="/activities" element={<ActivityFeedPage />} />
+          <Route path="/:username" element={<UserProfile />} />
+          <Route path="/showcase" element={<ComponentShowcase />} />
+          <Route path="/terms" element={<GitNestTerms />} />
 
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ErrorBoundary>
+      <BackToTop />
     </div>
   );
 }

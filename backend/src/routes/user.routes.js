@@ -4,18 +4,22 @@ import {
     updateProfile,
     followUser,
     unfollowUser,
+    getFollowers,
+    getFollowing,
 } from '../controllers/user.controller.js';
 import { protect } from '../middleware/authMiddleware.js';
-import validateRequest from '../middleware/validateRequest.js';
+import validate from '../middleware/validate.js';
 import { updateProfileValidator } from '../validators/user.validators.js';
 
 const router = express.Router();
 
-// Public route to view any user's profile
+// Public routes
 router.get('/:username', getUserProfile);
+router.get('/:username/followers', getFollowers);
+router.get('/:username/following', getFollowing);
 
 // Protected routes
-router.put('/profile', protect, updateProfileValidator, validateRequest, updateProfile);
+router.put('/profile', protect, validate(updateProfileValidator), updateProfile);
 router.post('/:username/follow', protect, followUser);
 router.delete('/:username/follow', protect, unfollowUser);
 
