@@ -7,6 +7,11 @@ import { logActivity } from '../services/activity.service.js';
 import ACTIVITY_TYPES from '../constants/activityTypes.js';
 import paginate, { buildPaginationMeta } from '../utils/paginate.js';
 
+// DRY helper — resolves a :username param to the owner document's _id.
+// Returns null when the username does not exist so callers can 404 cleanly.
+const resolveOwner = (username) =>
+    User.findOne({ username: username.toLowerCase() }).select('_id');
+
 export const createRepository = asyncHandler(async (req, res, next) => {
     const { name, description, visibility, language, topics } = req.body;
 
@@ -57,13 +62,8 @@ export const createRepository = asyncHandler(async (req, res, next) => {
 export const getRepository = asyncHandler(async (req, res, next) => {
     const { username, reponame } = req.params;
 
-    const owner = await User.findOne({
-        username: username.toLowerCase(),
-    });
-
-    if (!owner) {
-        return next(new AppError('Repository not found', 404));
-    }
+    const owner = await resolveOwner(username);
+    if (!owner) return next(new AppError('Repository not found', 404));
 
     const repository = await Repository.findOne({
         name: reponame,
@@ -93,14 +93,8 @@ export const getUserRepositories = asyncHandler(
             req.query.limit
         );
 
-        // Resolve owner
-        const user = await User.findOne({
-            username: username.toLowerCase(),
-        });
-
-        if (!user) {
-            return next(new AppError('User not found', 404));
-        }
+        const user = await resolveOwner(username);
+        if (!user) return next(new AppError('User not found', 404));
 
         // Owners can view all repositories
         // Others can only view public repositories
@@ -138,17 +132,9 @@ export const updateRepository = asyncHandler(
     async (req, res, next) => {
         const { username, reponame } = req.params;
 
-        const owner = await User.findOne({
-            username: username.toLowerCase(),
-        });
-
+        const owner = await resolveOwner(username);
         if (!owner || owner._id.toString() !== req.user.id) {
-            return next(
-                new AppError(
-                    'Repository not found or unauthorized',
-                    404
-                )
-            );
+            return next(new AppError('Repository not found or unauthorized', 404));
         }
 
         const repository = await Repository.findOne({
@@ -198,17 +184,9 @@ export const deleteRepository = asyncHandler(
     async (req, res, next) => {
         const { username, reponame } = req.params;
 
-        const owner = await User.findOne({
-            username: username.toLowerCase(),
-        });
-
+        const owner = await resolveOwner(username);
         if (!owner || owner._id.toString() !== req.user.id) {
-            return next(
-                new AppError(
-                    'Repository not found or unauthorized',
-                    404
-                )
-            );
+            return next(new AppError('Repository not found or unauthorized', 404));
         }
 
         const repository = await Repository.findOne({
@@ -235,13 +213,8 @@ export const starRepository = asyncHandler(
     async (req, res, next) => {
         const { username, reponame } = req.params;
 
-        const owner = await User.findOne({
-            username: username.toLowerCase(),
-        });
-
-        if (!owner) {
-            return next(new AppError('Repository not found', 404));
-        }
+        const owner = await resolveOwner(username);
+        if (!owner) return next(new AppError('Repository not found', 404));
 
         const repository = await Repository.findOne({
             name: reponame,
@@ -298,13 +271,8 @@ export const forkRepository = asyncHandler(
     async (req, res, next) => {
         const { username, reponame } = req.params;
 
-        const owner = await User.findOne({
-            username: username.toLowerCase(),
-        });
-
-        if (!owner) {
-            return next(new AppError('Repository not found', 404));
-        }
+        const owner = await resolveOwner(username);
+        if (!owner) return next(new AppError('Repository not found', 404));
 
         const original = await Repository.findOne({
             name: reponame,
