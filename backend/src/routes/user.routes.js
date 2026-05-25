@@ -13,12 +13,12 @@ import { updateProfileValidator } from '../validators/user.validators.js';
 
 const router = express.Router();
 
-//Public routes
+// Public routes
 router.get('/:username', getUserProfile);
 router.get('/:username/followers', getFollowers);
 router.get('/:username/following', getFollowing);
 
-//Protected routes
+// Protected routes
 router.put('/profile', protect, validate(updateProfileValidator), updateProfile);
 router.post('/:username/follow', protect, followUser);
 router.delete('/:username/follow', protect, unfollowUser);
