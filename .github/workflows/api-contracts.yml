@@ -8,6 +8,7 @@ on:
       - 'frontend/src/types/**'
       - 'scripts/**'
       - '.github/workflows/api-contracts.yml'
+
   push:
     branches:
       - main
@@ -15,21 +16,31 @@ on:
 jobs:
   api-contracts:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
           cache-dependency-path: backend/package-lock.json
+
+      - name: Install MongoDB memory server dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl-dev openssl
+
       - name: Install backend dependencies
         working-directory: backend
         run: npm ci
+
       - name: Validate OpenAPI compatibility
         working-directory: backend
         run: npm run contracts:check
+
       - name: Run contract tests
         working-directory: backend
         run: npm run test:contracts
