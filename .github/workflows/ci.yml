@@ -49,6 +49,11 @@ jobs:
           MONGO_URI: mongodb://localhost:27017/gitnest_test
           JWT_SECRET: ${{ secrets.JWT_SECRET_CI }}
           NODE_ENV: test
+
+      - name: Run saga orchestration tests
+        run: npm run test:saga
+        env:
+          NODE_ENV: test
 # FRONTEND
   frontend:
     name: Frontend (React + Vite)
