@@ -20,6 +20,7 @@ import GitNestPrivacy from './pages/GitNestPrivacy.jsx';
 import BackToTop from './components/BackToTop/BackToTop';
 import GitNestTerms from './pages/GitNestTerms.jsx';
 import RepositoryArchitecturePage from './pages/repositories/RepositoryArchitecturePage.jsx';
+import Architecture from './pages/Architecture';   // <-- NEW IMPORT
 
 const Dashboard = () => {
   const { user, logout } = useAuthStore();
@@ -66,6 +67,7 @@ function App() {
           <Route path="/showcase" element={<ComponentShowcase />} />
           <Route path="/privacy" element={<GitNestPrivacy />} />
           <Route path="/terms" element={<GitNestTerms />} />
+          <Route path="/architecture" element={<Architecture />} />   {/* <-- NEW ROUTE */}
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
