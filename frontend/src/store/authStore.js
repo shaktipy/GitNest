@@ -1,15 +1,24 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { loginUser, registerUser, getMe } from '../api/authApi';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { loginUser, registerUser, getMe } from "../api/authApi";
 
 
 
 const extractErrorMessage = (error) => {
   if (error?.errors && Array.isArray(error.errors) && error.errors.length > 0) {
-    return error.errors.map((err) => err.message).join(', ');
+    return error.errors.map((err) => err.message).join(", ");
   }
-  // eslint-disable-next-line no-undef
-  return error?.message || fallback;
+  return error?.message || "An error occurred";
+};
+
+const getFriendlyAuthError = (error, fallbackMessage) => {
+  const message = extractErrorMessage(error);
+
+  if (message && message !== "An error occurred") {
+    return message;
+  }
+
+  return fallbackMessage;
 };
 
 export const useAuthStore = create(
@@ -149,6 +158,6 @@ export const useAuthStore = create(
         token: state.token,
         isAuthenticated: state.isAuthenticated,
       }),
-    }
-  )
+    },
+  ),
 );
