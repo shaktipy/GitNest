@@ -9,6 +9,7 @@ import swaggerUi from 'swagger-ui-express';
 import authRoutes from './routes/auth.routes.js';
 import userRoutes from './routes/user.routes.js';
 import repositoryRoutes from './routes/repository.routes.js';
+import branchProtectionRoutes from './routes/branchProtection.routes.js';
 import activityRoutes from './routes/activity.routes.js';
 import pullRequestRoutes from './routes/pullRequest.routes.js';
 import architectureRoutes from './routes/architectureRoutes.js';
@@ -79,6 +80,7 @@ const createApp = () => {
   app.get('/api-docs.json', (req, res) => res.status(200).json(swaggerSpec));
   app.use('/api/v1/auth', authRoutes);
   app.use('/api/v1/repos', repositoryRoutes);
+  app.use('/api/v1/repos', branchProtectionRoutes);
   app.use('/api/v1/repositories', repositoryRoutes);
   app.use('/api/v1/architecture', architectureRoutes);
   app.use('/api/v1/users', userRoutes);

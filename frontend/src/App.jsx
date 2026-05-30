@@ -20,6 +20,7 @@ import GitNestPrivacy from './pages/GitNestPrivacy.jsx';
 import BackToTop from './components/BackToTop/BackToTop';
 import GitNestTerms from './pages/GitNestTerms.jsx';
 import RepositoryArchitecturePage from './pages/repositories/RepositoryArchitecturePage.jsx';
+import RepositorySettingsPage from './pages/RepositorySettingsPage.jsx';
 
 const Dashboard = () => {
   const { user, logout } = useAuthStore();
@@ -62,6 +63,7 @@ function App() {
           <Route path="/pull-requests/:id" element={<PullRequestDetailPage />} />
           <Route path="/activities" element={<ActivityFeedPage />} />
           <Route path="/:owner/:repo/architecture" element={<RepositoryArchitecturePage />} />
+          <Route path="/:username/:reponame/settings/branch-protection" element={<RepositorySettingsPage />} />
           <Route path="/user/:username" element={<UserProfile />} />
           <Route path="/showcase" element={<ComponentShowcase />} />
           <Route path="/privacy" element={<GitNestPrivacy />} />
