@@ -1,8 +1,7 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { loginUser, registerUser, getMe } from "../api/authApi";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { loginUser, registerUser, getMe } from '../api/authApi';
 
-// Fixed the error extraction to safely handle backend error messages without crashing
 const extractErrorMessage = (error) => {
   if (error?.response?.data?.errors && Array.isArray(error.response.data.errors)) {
     return error.response.data.errors.map((err) => err.message).join(', ');
@@ -10,7 +9,7 @@ const extractErrorMessage = (error) => {
   if (error?.errors && Array.isArray(error.errors) && error.errors.length > 0) {
     return error.errors.map((err) => err.message).join(", ");
   }
-  return error?.response?.data?.message || error?.message || 'An unexpected error occurred. Please try again.';
+  return error?.message || 'An error occurred';
 };
 
 export const useAuthStore = create(
