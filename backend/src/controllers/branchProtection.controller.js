@@ -6,6 +6,7 @@ import {
   listRules as listBranchProtectionRules,
   updateRule as updateBranchProtectionRule,
 } from '../services/branchProtection.service.js';
+import eventEmitter from '../events/eventEmitter.js';
 
 const forbiddenMessage =
   'Forbidden: only the repository owner can manage branch protection rules.';
@@ -70,6 +71,14 @@ export const createRule = async (req, res) => {
 
     try {
       const rule = await createBranchProtectionRule(repository._id, req.body);
+      eventEmitter.emit('BRANCH_PROTECTION_CREATED', {
+        actorId: req.user._id,
+        repositoryId: rule.repository,
+        repoName: req.params.reponame,
+        branch: rule.pattern,
+        rules: rule.toObject(),
+        ipAddress: req.ip,
+      });
       return res.status(201).json(rule);
     } catch (error) {
       return res.status(422).json({ message: error.message });
@@ -89,6 +98,15 @@ export const updateRule = async (req, res) => {
 
     try {
       const rule = await updateBranchProtectionRule(ruleId, repository._id, req.body);
+      eventEmitter.emit('BRANCH_PROTECTION_UPDATED', {
+        actorId: req.user._id,
+        repositoryId: rule.repository,
+        repoName: req.params.reponame,
+        branch: rule.pattern,
+        ruleId: rule._id,
+        changes: req.body,
+        ipAddress: req.ip,
+      });
       return res.status(200).json(rule);
     } catch (error) {
       return res.status(422).json({ message: error.message });
