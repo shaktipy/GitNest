@@ -60,11 +60,13 @@ return ( <div className="min-h-screen">
         element={<RepositorySettingsPage />}
       />
       <Route path="/user/:username" element={<UserProfile />} />
+      <Route path="/:username" element={<UserProfile />} />
       <Route path="/showcase" element={<ComponentShowcase />} />
       <Route path="/privacy" element={<GitNestPrivacy />} />
       <Route path="/terms" element={<GitNestTerms />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/oauth-success" element={<OAuthSuccess />} />
+      <Route path="/404" element={<NotFound />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<Dashboard />} />
