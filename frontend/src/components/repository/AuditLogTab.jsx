@@ -61,7 +61,6 @@ export default function AuditLogTab({ username, reponame }) {
   useEffect(() => {
     setPage(1);
     setFilters(initialFilters);
-    setSelectedLog(null);
   }, [username, reponame]);
 
   const queryFilters = {
@@ -154,7 +153,7 @@ export default function AuditLogTab({ username, reponame }) {
             <button
               type="button"
               onClick={handleClearFilters}
-              className="h-10 rounded-xl border border-zinc-200 px-4 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/[0.04]"
+              className="h-10 rounded-xl border border-zinc-200 px-4 text-sm font-medium text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/[0.05]"
             >
               Clear Filters
             </button>
@@ -250,7 +249,7 @@ export default function AuditLogTab({ username, reponame }) {
               <button
                 type="button"
                 onClick={() => setSelectedLog(null)}
-                className="rounded-xl border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/[0.04]"
+                className="rounded-xl border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/[0.05]"
               >
                 Close
               </button>

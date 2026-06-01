@@ -13,18 +13,6 @@ export default function GlobalSearch() {
   const [isOpen, setIsOpen] = useState(false);
   const addToast = useToastStore((state) => state.addToast);
 
-  const debouncedQuery = useMemo(() => {
-    let timeoutId;
-    return (query) => {
-      return new Promise((resolve) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          resolve(query);
-        }, 300);
-      });
-    };
-  }, []);
-
   const { data: searchResults, isLoading, isError, error } = useQuery({
     queryKey: ['search', searchQuery, activeType, page],
     queryFn: async () => {
