@@ -59,8 +59,11 @@ export default function AuditLogTab({ username, reponame }) {
   const [selectedLog, setSelectedLog] = useState(null);
 
   useEffect(() => {
-    setPage(1);
-    setFilters(initialFilters);
+    setState({
+      page: 1,
+      filters: initialFilters,
+      selectedLog: null,
+    });
   }, [username, reponame]);
 
   const queryFilters = {
@@ -248,7 +251,7 @@ export default function AuditLogTab({ username, reponame }) {
               </div>
               <button
                 type="button"
-                onClick={() => setSelectedLog(null)}
+                onClick={() => setState((current) => ({ ...current, selectedLog: null }))}
                 className="rounded-xl border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-white/10 dark:text-zinc-300 dark:hover:bg-white/[0.05]"
               >
                 Close
