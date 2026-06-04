@@ -23,6 +23,8 @@ import RepositorySettingsPage from './pages/RepositorySettingsPage.jsx';
 import OAuthSuccess from './pages/OAuthSuccess.jsx';
 import ContactPage from './pages/ContactPage';
 import Dashboard from './pages/Dashboard';
+import Architecture from './pages/Architecture';
+
 
 
 function App() {
@@ -59,6 +61,7 @@ function App() {
           <Route path="/terms" element={<GitNestTerms />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
+          <Route path="/architecture" element={<Architecture />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />

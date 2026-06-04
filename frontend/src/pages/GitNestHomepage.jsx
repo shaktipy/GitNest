@@ -274,7 +274,7 @@ export default function GitNestHomepage() {
                             </Link>
 
                             <Link
-                                to="/docs#architecture"
+                                to="/architecture"
                                 className="px-8 py-3 rounded-3xl border border-zinc-200 dark:border-white/10 bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl text-zinc-700 dark:text-zinc-200 hover:shadow-xl transition-all flex items-center gap-3"
                             >
 
@@ -842,7 +842,7 @@ export default function GitNestHomepage() {
                 </div>
             </section>
 
-            {/* Footer */}
+            {/* Footer – UPDATED: Architecture link now uses <Link> */}
             <footer className="relative overflow-hidden border-t border-[#dce7e3] bg-[#f8fbfa] dark:bg-[#080b11] py-14">
 
                 {/* BACKGROUND EFFECTS */}
@@ -934,25 +934,23 @@ export default function GitNestHomepage() {
                             </h4>
 
                             <div className="space-y-3">
-
-                                {[
-                                    "Contribution Guide",
-                                    "Roadmap",
-                                    "API Docs",
-                                    "Architecture",
-                                ].map((item) => (
-                                    <a
-                                        key={item}
-                                        href="#"
-                                        className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300"
-                                    >
-
-                                        <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
-
-                                        {item}
-
-                                    </a>
-                                ))}
+                                <a href="#" className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300">
+                                    <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
+                                    Contribution Guide
+                                </a>
+                                <a href="#" className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300">
+                                    <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
+                                    Roadmap
+                                </a>
+                                <a href="#" className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300">
+                                    <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
+                                    API Docs
+                                </a>
+                                {/* Architecture link - changed from <a href="#"> to <Link to="/architecture"> */}
+                                <Link to="/architecture" className="group flex items-center gap-3 text-[17px] text-[#64748b] dark:text-zinc-400 hover:text-[#00b86b] transition-all duration-300">
+                                    <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
+                                    Architecture
+                                </Link>
 
                                 {/* LEGAL LINK */}
                                 <Link
@@ -960,7 +958,6 @@ export default function GitNestHomepage() {
                                     className="group flex items-center gap-3 text-[16px] text-[#475569] hover:text-[#00b86b] transition-all duration-300"
                                 >
                                     <div className="w-2 h-2 rounded-full bg-[#00c97b] group-hover:scale-150 transition-transform" />
-
                                     Terms & Conditions
                                 </Link>
 

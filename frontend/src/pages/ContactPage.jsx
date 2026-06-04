@@ -1,21 +1,15 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { useToastStore } from "../store/useToastStore";
-import { useThemeStore } from '../store/useThemeStore';
-import {
-    GitBranch,
-    ShieldCheck,
-    Sparkles,
-    Users,
+import { Mail, Phone, MapPin, Send ,
     ArrowRight,
     Sun,
     Moon,
-    Layers3,
-    Code2,
-    Wand2,
-    Shield,
     Menu, X
-} from "lucide-react";
+}
+
+from "lucide-react";
+import { useToastStore } from "../store/useToastStore";
+import { useThemeStore } from '../store/useThemeStore';
+
 import { Link } from 'react-router-dom';
 import logo from "../assets/logo.png";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,8 +17,8 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ContactPage() {
 
     const [activeLink, setActiveLink] = useState(() => {
-        if (typeof window !== "undefined" && window.location.hash) {
-            return window.location.hash;
+        if (globalThis.window !== undefined && globalThis.location.hash) {
+            return globalThis.location.hash;
         }
 
         return "#home";

@@ -59,6 +59,7 @@ export default function AuditLogTab({ username, reponame }) {
   const [selectedLog, setSelectedLog] = useState(null);
 
   useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
     setPage(1);
     setFilters(initialFilters);
     setSelectedLog(null);

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Search, X } from 'lucide-react';
 import { performGlobalSearch } from '../../api/searchApi.js';
@@ -12,18 +12,6 @@ export default function GlobalSearch() {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const addToast = useToastStore((state) => state.addToast);
-
-  const debouncedQuery = useMemo(() => {
-    let timeoutId;
-    return (query) => {
-      return new Promise((resolve) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          resolve(query);
-        }, 300);
-      });
-    };
-  }, []);
 
   const { data: searchResults, isLoading, isError, error } = useQuery({
     queryKey: ['search', searchQuery, activeType, page],
